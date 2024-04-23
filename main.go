@@ -6,10 +6,11 @@ import (
 )
 
 func main() {
-	configs.InitDB()
+	db := configs.InitDB()
 
 	router := gin.Default()
-	GetRouter(router)
+	container := NewContainer(db)
+	GetRouter(router, container)
 
 	router.Run("localhost:8080")
 }

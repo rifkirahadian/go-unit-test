@@ -3,7 +3,7 @@ package controllers
 import (
 	"net/http"
 
-	"example.com/web-service-gin/models"
+	"example.com/web-service-gin/src/models"
 	"github.com/gin-gonic/gin"
 )
 
