@@ -11,4 +11,6 @@ func GetRouter(router *gin.Engine, container *Container) {
 	router.GET("/albums/:id", controllers.GetAlbumByID)
 
 	router.GET("/books", container.BookController.FindBooks)
+
+	router.POST("/order", container.OrderController.CreateBook)
 }

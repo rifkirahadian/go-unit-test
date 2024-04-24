@@ -12,3 +12,7 @@ type BookService struct {
 func (s *BookService) GetAllBook() ([]models.Book, error) {
 	return s.Repo.GetAll()
 }
+
+func (s *BookService) FindOneBook(id int16) (models.Book, error) {
+	return s.Repo.FindOne(id)
+}

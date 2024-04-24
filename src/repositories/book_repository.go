@@ -16,3 +16,10 @@ func (r *BookRepository) GetAll() ([]models.Book, error) {
 	}
 	return books, nil
 }
+
+func (r *BookRepository) FindOne(id int16) (models.Book, error) {
+	var book models.Book
+	result := r.DB.First(&book, id)
+
+	return book, result.Error
+}
