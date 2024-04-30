@@ -21,11 +21,17 @@ func TestBookRepository_GetAll(t *testing.T) {
 
 	implObj := NewBookRepository(db)
 	books := sqlmock.NewRows([]string{"id", "title", "writer", "cover_image"}).
-		AddRow(1, "Clean Code", "John Doe", "https:/image.jpg")
+		AddRow(1, "Clean Code", "John Doe", "https:/image1.jpg").
+		AddRow(1, "Dirty Code", "John Cena", "https:/image2.jpg")
 
 	expectedSQL := "SELECT (.+) FROM \"books\""
 	mock.ExpectQuery(expectedSQL).WillReturnRows(books)
-	_, res := implObj.GetAll()
-	assert.Nil(t, res)
+	res, err := implObj.GetAll()
+	assert.Nil(t, err)
+	assert.Equal(t, len(res), 2)
+	assert.Equal(t, res[0].Title, "Clean Code")
+	assert.Equal(t, res[0].Writer, "John Doe")
+	assert.Equal(t, res[0].CoverImage, "https:/image1.jpg")
+
 	assert.Nil(t, mock.ExpectationsWereMet())
 }
