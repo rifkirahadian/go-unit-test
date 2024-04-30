@@ -10,13 +10,13 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewOrderRepository(DB *gorm.DB) *BookRepository {
-	return &BookRepository{
+func NewOrderRepository(DB *gorm.DB) *OrderRepository {
+	return &OrderRepository{
 		DB: DB,
 	}
 }
 
-func TestOrderRepository_GetAll(t *testing.T) {
+func TestOrderRepository_Create(t *testing.T) {
 	sqlDB, db, mock := configs.DbMock(t)
 	defer sqlDB.Close()
 	implObj := NewOrderRepository(db)
