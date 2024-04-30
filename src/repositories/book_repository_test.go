@@ -35,3 +35,22 @@ func TestBookRepository_GetAll(t *testing.T) {
 
 	assert.Nil(t, mock.ExpectationsWereMet())
 }
+
+func TestBookRepository_FindOne(t *testing.T) {
+	sqlDB, db, mock := configs.DbMock(t)
+	defer sqlDB.Close()
+
+	implObj := NewBookRepository(db)
+	books := sqlmock.NewRows([]string{"id", "title", "writer", "cover_image"}).
+		AddRow(1, "Clean Code", "John Doe", "https:/image1.jpg")
+
+	expectedSQL := "SELECT (.+) FROM \"books\""
+	mock.ExpectQuery(expectedSQL).WillReturnRows(books)
+	res, err := implObj.FindOne(1)
+	assert.Nil(t, err)
+	assert.Equal(t, res.Title, "Clean Code")
+	assert.Equal(t, res.Writer, "John Doe")
+	assert.Equal(t, res.CoverImage, "https:/image1.jpg")
+
+	assert.Nil(t, mock.ExpectationsWereMet())
+}
