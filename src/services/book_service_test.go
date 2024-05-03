@@ -42,3 +42,27 @@ func TestBookService_GetAllBook(t *testing.T) {
 
 	assert.Nil(t, mock.ExpectationsWereMet())
 }
+
+func TestBookService_FindOneBook(t *testing.T) {
+	// Create a mock repository
+	sqlDB, db, mock := configs.DbMock(t)
+	defer sqlDB.Close()
+	repo := NewBookRepository(db)
+
+	// Create the service with the mock repository
+	service := services.BookService{Repo: repo}
+
+	books := sqlmock.NewRows([]string{"id", "title", "writer", "cover_image"}).
+		AddRow(1, "Clean Code", "John Doe", "https:/image1.jpg")
+
+	expectedSQL := "SELECT (.+) FROM \"books\""
+	mock.ExpectQuery(expectedSQL).WillReturnRows(books)
+
+	res, err := service.FindOneBook(1)
+	assert.Nil(t, err)
+	assert.Equal(t, res.Title, "Clean Code")
+	assert.Equal(t, res.Writer, "John Doe")
+	assert.Equal(t, res.CoverImage, "https:/image1.jpg")
+
+	assert.Nil(t, mock.ExpectationsWereMet())
+}
